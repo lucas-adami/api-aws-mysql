@@ -3,9 +3,11 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
+const cors = require('cors'); // Adicionado
 
 dotenv.config();
 const app = express();
+app.use(cors()); // Ativado para permitir requisições do navegador
 app.use(express.json());
 
 //#region Configuração da pool MySQL
@@ -38,7 +40,7 @@ const swaggerOptions = {
       }
     ],
     servers: [
-      { url: `http://localhost:${process.env.PORT || 3000}` }
+      { url: 'http://3.239.201.199:3000' } // IP público da EC2
     ]
   },
   apis: ['server.js']
@@ -54,7 +56,6 @@ app.get('/', (req, res) => {
 //#endregion
 
 //#region Endpoint para inicializar banco e tabela
-
 /**
  * @swagger
  * /init-db:
@@ -268,6 +269,6 @@ app.delete('/produtos/:id', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
-  console.log(`Swagger disponível em http://localhost:${PORT}/swagger`);
+  console.log(`Swagger disponível em http://3.239.201.199:${PORT}/swagger`);
 });
 //#endregion
